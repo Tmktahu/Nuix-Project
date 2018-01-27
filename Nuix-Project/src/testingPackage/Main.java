@@ -41,8 +41,8 @@ public class Main {
 	
 	public static Ini readIniFile() {
 		try {
-			Ini iniFile = new Ini(new File("/Users/main/eclipse-workspace/Nuix-Project/src/testingPackage/config.ini"));
-			
+			//Ini iniFile = new Ini(new File("/Users/main/eclipse-workspace/Nuix-Project/src/testingPackage/config.ini"));
+			Ini iniFile = new Ini(new File("/Users/main/git/Nuix-Project/src/testingPackage/config.ini"));
 			return iniFile;
 		} catch (Exception e) {
 			System.out.println("There was an error reading the ini file: " + e);

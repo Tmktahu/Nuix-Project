@@ -1,9 +1,12 @@
 package testingPackage;
 
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -112,9 +115,44 @@ public class GuiTesting {
 		public void actionPerformed(ActionEvent e) {
 			count++;
 			EXECUTE_BUTTON.setText("I've been clicked " + count + " times!");
+			List<Component> allComponents = getAllComponents(PANEL);
+			
+			//create a new array of strings to store the config values in
+			String[] configValues = new String[9];
+			//initiate the count
+			int configCount = 0;
+			//for each component in the list
+			for (Component item : allComponents) {
+				//if it is a dropdown-list
+				if(item instanceof JComboBox) {
+					//snag the selected value of the dropdown and store it in the array
+					configValues[configCount] = ((JComboBox)item).getSelectedItem().toString();
+					configCount++; //then add 1 to the count
+				}
+			}
+			
+		
+			for (int i = 0; i < configValues.length; i++) {
+		         if (i > 0) {
+		            System.out.print(", ");
+		         }
+		         System.out.print(configValues[i]);
+		    }
+			System.out.println(" ");
 			
 		}
 		
+	}
+	
+	public List<Component> getAllComponents(final Container c) {
+		Component[] comps = c.getComponents();
+	    List<Component> compList = new ArrayList<Component>();
+	    for (Component comp : comps) {
+	        compList.add(comp);
+	        if (comp instanceof Container)
+	            compList.addAll(getAllComponents((Container) comp));
+	    }
+	    return compList;
 	}
 
 }
