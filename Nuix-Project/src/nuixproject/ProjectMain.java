@@ -4,14 +4,18 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JFrame;
+
 import nuix.Utilities;
 import nuix.engine.CredentialsCallbackInfo;
 import nuix.engine.LicenceSourceInformation;
 
-public class HandlerMain {
+public class ProjectMain {
 		
 	public static void main(String[] args) {
 		
+		
+		/*/===================================== Code for getting a Nuix license =====================================
 		final String server = "127.0.0.1";
 		final String user = "hoffman@digitalda.org";
 		final String pass = "cyeJrkCW9rG3";
@@ -65,5 +69,15 @@ public class HandlerMain {
 			    if(container != null)
 			        container.close();
 			}
+		//===================================== End code for getting a license ===================================== */
+		
+		
+		//so by this point we have a functioning utlities object
+		//first thing is to get the GUI running
+		//we need a Dispatcher
+		Dispatcher dispatcher = new Dispatcher(); //the dispatcher should wait for instructions from the GUI
+		//then we can hand operations over to the GUI
+		GuiMain masterFrame = new GuiMain(dispatcher);
+		masterFrame.createWindow();
 	}
 }

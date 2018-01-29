@@ -8,7 +8,7 @@ import java.util.List;
 import com.opencsv.CSVReader;
 import org.ini4j.Ini;
 
-public class Main {
+public class TestingMain {
 	public static void main(String[] args) {
 		String[][] testArray = open_qt_csv();
 		
@@ -31,8 +31,8 @@ public class Main {
 		
 		//returns null on bad section
 		
-		GuiTesting theGui = new GuiTesting();
-		theGui.createWindow();
+		//GuiTesting theGui = new GuiTesting();
+		//theGui.createWindow();
 		
 		
 		
