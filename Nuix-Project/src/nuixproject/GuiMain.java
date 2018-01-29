@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 public class GuiMain {
 	
 	private static Dispatcher DISPATCHER_OBJECT;
-	private static HashMap<String, Object> SETTINGS_MAP;
+	private static HashMap<String, String> SETTINGS_MAP;
 	private static JFrame FRAME;
 	private static JPanel PANEL;
 	private static JButton EXECUTE_BUTTON;
@@ -27,7 +27,7 @@ public class GuiMain {
 	
 	public GuiMain(Dispatcher logicObject) { //constructor
 		DISPATCHER_OBJECT = logicObject;
-		SETTINGS_MAP = new HashMap<String, Object>();
+		SETTINGS_MAP = new HashMap<String, String>();
 		count = 0;
 	}
 	
@@ -140,28 +140,13 @@ public class GuiMain {
 			List<Component> allComponents = getAllComponents(PANEL);
 			
 			
-			String[] configValues = new String[9]; //create a new array of strings to store the config values in
-			int configCount = 0; //initiate the count
-			
 			for (Component item : allComponents) { //for each component in the list
 				if(item instanceof JComboBox) { //if it is a dropdown-list
-					SETTINGS_MAP.put(((JComboBox)item).getName(), convertSetting(((JComboBox)item).getSelectedItem().toString()));
-					
-					
-					
-					configValues[configCount] = ((JComboBox)item).getSelectedItem().toString(); //snag the selected value of the dropdown and store it in the array
-					configCount++; //then add 1 to the count
+					SETTINGS_MAP.put(((JComboBox)item).getName(), ((JComboBox)item).getSelectedItem().toString());
 				}
 			}
 			
-		
-			for (int i = 0; i < configValues.length; i++) {
-		         if (i > 0) {
-		            System.out.print(", ");
-		         }
-		         System.out.print(configValues[i]);
-		    }
-			System.out.println(" ");
+			System.out.println(java.util.Arrays.toString(SETTINGS_MAP.entrySet().toArray()));
 			
 			
 			//so how do I get the process running?

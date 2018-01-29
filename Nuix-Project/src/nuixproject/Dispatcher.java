@@ -15,7 +15,7 @@ public class Dispatcher {
 		
 	}
 	
-	public void setSettings(String[] rawSettings) {
+	public void setSettings(HashMap<String, String> rawSettings) {
 		//so here we are given the raw settings as taken from the GUI
 		//yes-no should be converted to boolean values
 		
@@ -25,9 +25,15 @@ public class Dispatcher {
 		//what type should the second array be??
 		//if I want to store multiple types of values like strings, ints, and booleans, then the array type needs to be a 
 				//its not an array. it's a Map
+
+		//screw it. we aren't converting the values over. instead if we need to check a yes/no then we'll do a string.equals()
+			//I'm doing this because I don't want to make a generic HashMap<String, Object> and then type everything we pull out of it. It feels sloppy and messy.
 		
-		//make a new hashMap for storing the converted settings
-		HashMap<String, Object> settingsMap = new HashMap<String, Object>();
+		
+		//so, assuming we now have the settings,
+			//we need to perform tasks in the right order with the settings provided. 
+		
+		//how do we manage the order of tasks to be completed??
 		
 		
 		
