@@ -2,6 +2,7 @@ package nuixproject;
 
 import java.io.File;
 import java.io.FileReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -14,11 +15,11 @@ import com.opencsv.CSVReader;
 public class Support {
 	
 	private static Case TARGET_CASE;
-	private static Utilities utilities;
+	private static Utilities UTILITIES;
 	private static Information info;
 	
 	public Support(Utilities utilitiesObject, Information infoObject) {
-		utilities = utilitiesObject;
+		UTILITIES = utilitiesObject;
 		info = infoObject;
 	}
 	
@@ -27,7 +28,7 @@ public class Support {
 		System.out.println("Opening target case");
 		
 		try {
-			TARGET_CASE = utilities.getCaseFactory().open("E:/10.11.17_case_copy_for_testing");
+			TARGET_CASE = UTILITIES.getCaseFactory().open("E:/10.11.17_case_copy_for_testing");
 			System.out.println("Opened target case.");
 			
 		} catch (Exception e) {
@@ -52,13 +53,13 @@ public class Support {
 		}
 	}
 	
-	public String[][] open_qt_csv() {
+	public HashMap<String, String> open_qt_csv() {
 		System.out.println("Opening the query-tag .csv file.");
 		
 		try {
 			//here we take a given csv file and we read it into a 2D array called 'reader', then we return that array.
 			//target.csv is term,term\n for each entry
-					
+			HashMap<String, String> csvMap = new HashMap<String, String>();	
 					
 			// === Here we are using OpenCSV ===
 			// assemble the file path
@@ -66,15 +67,20 @@ public class Support {
 			// create the reader
 			CSVReader csvReader = new CSVReader(new FileReader(new File(targetFile)));
 			// make a list and read everything into it
-			List<String[]> list = csvReader.readAll();
-
+			//List<String[]> list = csvReader.readAll();
+			String[] nextLine;
+			while ((nextLine = csvReader.readNext()) != null) {
+		        // nextLine[] is an array of values from the line
+		        //System.out.println(nextLine[0] + nextLine[1] + "etc...");
+				csvMap.put(nextLine[0], nextLine[1]);
+		     }
 			// make a 2D array of the correct size
-			String[][] dataArr = new String[list.size()][];
+			//String[][] dataArr = new String[list.size()][];
 			// convert the list to an array
-			dataArr = list.toArray(dataArr);		
+			//dataArr = list.toArray(dataArr);		
 			
 			//return the array
-			return dataArr;
+			return csvMap;
 			
 					
 		} catch (Exception e) {
@@ -84,6 +90,10 @@ public class Support {
 		} finally {
 			System.out.println("Finished opening the query-tag .csv file.");
 		}
+	}
+	
+	public Utilities getUtilities() {
+		return UTILITIES;
 	}
 
 }
