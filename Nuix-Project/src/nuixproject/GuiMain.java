@@ -19,6 +19,8 @@ import javax.swing.JTextArea;
 
 public class GuiMain {
 	
+	//test
+	
 	private Dispatcher DISPATCHER_OBJECT;
 	private HashMap<String, String> SETTINGS_MAP;
 	private JFrame FRAME;
