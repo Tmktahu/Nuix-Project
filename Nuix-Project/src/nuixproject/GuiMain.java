@@ -15,15 +15,17 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class GuiMain {
 	
-	private static Dispatcher DISPATCHER_OBJECT;
-	private static HashMap<String, String> SETTINGS_MAP;
-	private static JFrame FRAME;
-	private static JPanel PANEL;
-	private static JButton EXECUTE_BUTTON;
-	private static int count;
+	private Dispatcher DISPATCHER_OBJECT;
+	private HashMap<String, String> SETTINGS_MAP;
+	private JFrame FRAME;
+	private JPanel PANEL;
+	private JButton EXECUTE_BUTTON;
+	private int count;
+	private JTextArea logBox;
 	
 	public GuiMain(Dispatcher logicObject) { //constructor
 		DISPATCHER_OBJECT = logicObject;
@@ -36,7 +38,7 @@ public class GuiMain {
 	public void createWindow() {
 		//create the frame, name it, set it's size, and set the exit operation
 		FRAME = new JFrame("Nuix Program Thingy of Coolness");
-		FRAME.setSize(400, 500);
+		FRAME.setSize(400, 700);
 		FRAME.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		//make the master panel, set it's layout to BoxLayout, add it to the frame
@@ -110,8 +112,22 @@ public class GuiMain {
 		EXECUTE_BUTTON.addActionListener(new ExecuteHandler());
 		EXECUTE_BUTTON.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
+		
+		logBox = new JTextArea(); //create our textArea
+		logBox.setText("Application Log:\n");
+		logBox.setEditable(false);
+		logBox.setLineWrap(true);
+		logBox.setWrapStyleWord(true);
+		javax.swing.JScrollPane scrollPane = new javax.swing.JScrollPane(logBox); //make a scrollPane for clarity
+		scrollPane.setPreferredSize(new java.awt.Dimension(10, 200));
+		PANEL.add(scrollPane); //add the scrollPane to the master panel
+		
 		//NOW set the frame to be visible
 		FRAME.setVisible(true);
+	}
+	
+	public void logAction(String input) {
+		logBox.append(input + "\n");
 	}
 	
 	private JPanel createOption(String optionName, String[] optionList) { //create a dropdown option with a title
@@ -137,16 +153,16 @@ public class GuiMain {
 		public void actionPerformed(ActionEvent e) {
 			count++;
 			EXECUTE_BUTTON.setText("I've been clicked " + count + " times!");
-			List<Component> allComponents = getAllComponents(PANEL);
 			
+			List<Component> allComponents = getAllComponents(PANEL); //get all components in the GUI
 			
 			for (Component item : allComponents) { //for each component in the list
-				if(item instanceof JComboBox) { //if it is a dropdown-list
+				if(item instanceof JComboBox) { //if it is a drop-down list
 					SETTINGS_MAP.put(((JComboBox)item).getName(), ((JComboBox)item).getSelectedItem().toString());
 				}
 			}
 			
-			System.out.println(java.util.Arrays.toString(SETTINGS_MAP.entrySet().toArray()));
+			logAction("Selected options: " + java.util.Arrays.toString(SETTINGS_MAP.entrySet().toArray()));
 			
 			
 			//so how do I get the process running?
@@ -155,16 +171,6 @@ public class GuiMain {
 			
 		}
 		
-	}
-	
-	private Object convertSetting(String input) { //basic method to convert settings 'yes' and 'no' to boolean values
-		if(input.equals("yes")) {
-			return true;
-		} else if (input.equals("no")) {
-			return false;
-		} else {
-			return input;
-		}
 	}
 	
 	public List<Component> getAllComponents(final Container c) { //a method I found online to grab all components in a swing GUI

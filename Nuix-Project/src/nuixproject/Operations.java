@@ -46,7 +46,7 @@ public class Operations {
 				
 				System.out.println("Searching for \"" + query + ".\"");
 				System.out.println("Tagging \"" + tag + ".\"");
-				bulkAnnotater.addTag(tag, currentCase.search(query)); //submit the query with the current case
+				//bulkAnnotater.addTag(tag, currentCase.search(query)); //submit the query with the current case
 				System.out.println("Finished searching and tagging.");
 			}
 				
