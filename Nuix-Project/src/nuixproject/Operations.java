@@ -2,16 +2,19 @@ package nuixproject;
 
 import java.util.HashMap;
 
-import nuix.Utilities;
 import nuix.BulkAnnotater;
+import nuix.Case;
 
 public class Operations {
 	
-	private static Support SUPPORT;
+	private Support support;
+	private Case targetCase;
 
 	
 	public Operations(Support supportObject) {
-
+		support = supportObject;
+		//open the target case
+		targetCase = supportObject.getCase();
 	}
 	
 	public void email_tag() {
@@ -37,16 +40,16 @@ public class Operations {
 		HashMap<String, String> tagMap;
 		
 		try {
-			tagMap = SUPPORT.open_qt_csv(); //go get the hashmap
+			tagMap = support.open_qt_csv(); //go get the hashmap
 			for (HashMap.Entry<String, String> entry : tagMap.entrySet()) { //for each row (aka item in the map
 				String query = entry.getKey(); //grab the query (first thing)
 				String tag = entry.getValue(); //grab the tag to be set (second thing)
 				
-				BulkAnnotater bulkAnnotater = SUPPORT.getUtilities().getBulkAnnotater(); //=========figure out what this does
+				BulkAnnotater bulkAnnotater = support.getUtilities().getBulkAnnotater(); //=========figure out what this does
 				
 				System.out.println("Searching for \"" + query + ".\"");
 				System.out.println("Tagging \"" + tag + ".\"");
-				bulkAnnotater.addTag(tag, currentCase.search(query)); //submit the query with the current case
+				bulkAnnotater.addTag(tag, targetCase.search(query)); //submit the query with the current case
 				System.out.println("Finished searching and tagging.");
 			}
 				

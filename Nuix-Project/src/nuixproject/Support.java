@@ -95,6 +95,10 @@ public class Support {
 	public Utilities getUtilities() {
 		return UTILITIES;
 	}
+	
+	public Case getCase() {
+		return TARGET_CASE;
+	}
 
 }
 

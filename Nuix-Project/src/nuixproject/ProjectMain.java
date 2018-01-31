@@ -1,5 +1,6 @@
 package nuixproject;
 
+import java.awt.EventQueue;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
@@ -9,12 +10,13 @@ import javax.swing.JFrame;
 import nuix.Utilities;
 import nuix.engine.CredentialsCallbackInfo;
 import nuix.engine.LicenceSourceInformation;
+import testingPackage.TestWindow;
 
 public class ProjectMain {
 		
 	public static void main(String[] args) {
 		
-		
+		Utilities utilities;
 		/*/===================================== Code for getting a Nuix license =====================================
 		final String server = "127.0.0.1";
 		final String user = "hoffman@digitalda.org";
@@ -74,10 +76,17 @@ public class ProjectMain {
 		
 		//so by this point we have a functioning utlities object
 		//first thing is to get the GUI running
-		//we need a Dispatcher
-		Dispatcher dispatcher = new Dispatcher(); //the dispatcher should wait for instructions from the GUI
-		//then we can hand operations over to the GUI
-		GuiMain masterFrame = new GuiMain(dispatcher);
-		masterFrame.createWindow();
+		//GuiMain masterFrame = new GuiMain(utilities); //create the GUI and pass it the utilities object we got
+		//masterFrame.createWindow();
+		utilities = null;
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Gui window = new Gui(utilities);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 }

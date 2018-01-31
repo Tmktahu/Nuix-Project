@@ -2,6 +2,8 @@ package nuixproject;
 
 import java.util.HashMap;
 
+import nuix.Utilities;
+
 public class Dispatcher {
 	//so this dispatcher should be able to:
 		//translate GUI settings into usable values, stored in a global variable
@@ -9,9 +11,18 @@ public class Dispatcher {
 		//execute those tasks via am Operations object.
 	
 	//set up our global variables
-	private static Operations operator;
+	private Information information;
+	private Support support;
+	private Operations operator;
 	
-	public Dispatcher() { //constructor
+	
+	public Dispatcher(Utilities utilities) { //constructor
+		information = new Information();
+		support = new Support(utilities, information);
+		operator = new Operations(support);
+	}
+	
+	public void execute(HashMap<String, String> rawSettings) {
 		
 	}
 	
