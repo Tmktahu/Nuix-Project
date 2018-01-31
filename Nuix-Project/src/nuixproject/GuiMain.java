@@ -36,7 +36,6 @@ public class GuiMain {
 	}
 	
 	
-	
 	public void createWindow() {
 		//create the frame, name it, set it's size, and set the exit operation
 		frame = new JFrame("Nuix Program Thingy of Coolness");
@@ -52,7 +51,6 @@ public class GuiMain {
 		String[] yesNo = {"yes", "no"};
 		String[] OcrFiletype = {".pdf", ".tiff"};
 		String[] OcrQuality = {"high", "medium", "fast"};
-		
 		
 		
 		//[tasks] section title --------------------------------------------
@@ -86,7 +84,6 @@ public class GuiMain {
 		//end [ocr] section ------------------------------------------------
 		
 		
-		
 		//[export] section title -------------------------------------------
 		panel.add(createSectionTitle("Export Settings"));
 		
@@ -118,6 +115,10 @@ public class GuiMain {
 		frame.setVisible(true);
 	}
 	
+	public void logAction(String input) {
+		logBox.append(input + "\n");
+	}
+	
 	private JPanel createOption(String optionName, String[] optionList) { //create a dropdown option with a title
 		JPanel panel = new JPanel(); //make a panel
 		JLabel optionLabel = new JLabel(optionName + ":"); //make a label and name it
@@ -145,18 +146,15 @@ public class GuiMain {
 			
 			
 			for (Component item : allComponents) { //for each component in the list
+
 				if(item instanceof JComboBox) { //if it is a dropdown-list
 					settingsMap.put(((JComboBox)item).getName(), ((JComboBox)item).getSelectedItem().toString());
+
 				}
 			}
-			
+		
 			System.out.println(java.util.Arrays.toString(settingsMap.entrySet().toArray()));
-			
-			
-			//so how do I get the process running?
-			//how about, I use a set method to take these values and send them to another object, then I can call a function in that object to do the stuff
-			//this means I need a 'logic' object.
-			
+
 		}
 		
 	}
