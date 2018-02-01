@@ -1,9 +1,13 @@
 package nuixproject;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import nuix.BulkAnnotater;
 import nuix.Case;
+import nuix.Item;
+import nuix.OcrProcessor;
 
 public class Operations {
 	
@@ -25,8 +29,32 @@ public class Operations {
 		
 	}
 	
-	public void ocr() {
+	public void ocr(String filetype, String qualityChoice, String nonSearchable) {
+		//Perform OCR on files of the specified extension.
+		String searchability = null;
+		String modifier = null;
+		if (nonSearchable.equals("yes")) {
+			searchability = "non-searchable";
+			modifier = " AND NOT content:*";
+		} //should I else different values for those two strings? --------------------------------------------------------------------
 		
+		System.out.println("Starting OCR processing for " + searchability + " " + filetype + " files.");
+		try {
+			List<Item> selection = targetCase.search("mime-type:application/" + filetype.replace(".", "") + modifier);
+			OcrProcessor ocrProc = support.getUtilities().createOcrProcessor();
+			Map<String, String> settingsMap = new HashMap<String, String>();
+			settingsMap.put("quality", qualityChoice);
+			
+			
+			ocrProc.process(selection, settingsMap); //("quality" : qual_choice, 'updateText' : str(update_text)});
+			
+		} catch (Exception e) {
+			System.out.println("Failed OCR processing for " + searchability + " " + filetype + " files due to error: " + e);
+	
+		} finally {
+			System.out.println("Finished OCR processing for " + searchability + " " + filetype + " files.");
+		}
+		// ocr reload evidence stores: use custom metadata or seearch fields
 	}
 	
 	public void priv_emails() {
