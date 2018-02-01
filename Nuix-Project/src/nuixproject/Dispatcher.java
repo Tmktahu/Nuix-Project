@@ -2,6 +2,7 @@ package nuixproject;
 
 import java.util.HashMap;
 
+import nuix.Case;
 import nuix.Utilities;
 
 public class Dispatcher {
@@ -15,6 +16,8 @@ public class Dispatcher {
 	private Support support;
 	private Operations operator;
 	
+	private Case currentCase;
+	
 	
 	public Dispatcher(Utilities utilities) { //constructor
 		information = new Information();
@@ -22,7 +25,41 @@ public class Dispatcher {
 		operator = new Operations(support);
 	}
 	
-	public void execute(HashMap<String, String> rawSettings) {
+	public void execute(HashMap<String, String> settings) {
+		
+		//first, open the case
+		String casePath = settings.get("casePath");
+		currentCase = support.open_target_case(casePath);
+		
+		
+		
+		//here lets do the search_tag action
+		if(settings.get("search_tag").equals("yes")) { //if they want to do a search_tag
+			String csvPath = settings.get("searchTagCsvPath");
+			operator.search_tag(csvPath);
+		}
+		
+		
+		//so what is the goal?
+		//well we want to sit down and perform the tasks selected in order.
+		//so what tasks are there?
+		
+			//searching the data set for keywords from the given .csv file and apply the given tags
+		
+			//search the data set and tag emails that are to/from addresses given in a .csv file
+		
+			//perform OCR
+		
+			//export something
+		
+		
+		//IF you want to run OCR, you can choose these options:
+			//what file types you want to OCR (pdf or tiff)
+			//what quality level you want
+			//do you want to limit OCR to non-searchable items only?
+		
+		
+		
 		
 	}
 	

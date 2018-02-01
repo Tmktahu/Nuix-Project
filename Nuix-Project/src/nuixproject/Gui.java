@@ -13,6 +13,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.SwingConstants;
 
@@ -27,6 +29,8 @@ import javax.swing.Box;
 import java.awt.Color;
 import java.awt.Button;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -166,6 +170,25 @@ public class Gui {
 		comboBoxOnlySearchable.setBounds(128, 290, 71, 27);
 		comboBoxOnlySearchable.setName("only_searchable");
 		frame.getContentPane().add(comboBoxOnlySearchable);
+		
+		comboBoxOcr.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if (e.getStateChange() == ItemEvent.SELECTED) {
+
+					if (e.getItem().equals("no")) {
+						comboBoxFiletype.setEnabled(false);
+						comboBoxQuality.setEnabled(false);
+						comboBoxOnlySearchable.setEnabled(false);
+						
+					} else {
+						comboBoxFiletype.setEnabled(true);
+						comboBoxQuality.setEnabled(true);
+						comboBoxOnlySearchable.setEnabled(true);
+					}
+
+				}
+			}
+		});
 		//=================== end ocr options setup ===================
 		
 		
@@ -255,8 +278,72 @@ public class Gui {
 				settingsMap.put("casePath", textField.getText());
 				System.out.println(java.util.Arrays.toString(settingsMap.entrySet().toArray()));
 				
-				dispatcher.execute(settingsMap);
 				
+				
+				boolean goodToGo = true;
+				
+				if(settingsMap.get("search_tag").equals("yes")) {
+					//make a new dialog window asking for a path to a CSV file.
+					
+					int response = JOptionPane.showConfirmDialog(null, "Please select a CSV file for the search_tag function.", "Choose CSV", JOptionPane.YES_NO_OPTION);
+					if(response == 0) { //if they choose to select a file
+						JFileChooser fileChooser = new JFileChooser(); //make a file chooser
+						
+						int result = fileChooser.showDialog(null, "Select CSV"); //and let them select a file
+						if (result == JFileChooser.APPROVE_OPTION) { //if they get one
+				            String searchTagCsvPath = fileChooser.getSelectedFile().getPath(); //get the path they selected
+				            JOptionPane.showMessageDialog(null, "You selected " + searchTagCsvPath); //tell them what they selected
+				            settingsMap.put("searchTagCsvPath", searchTagCsvPath); //and store it
+				            
+				        } else if (result == JFileChooser.CANCEL_OPTION) { //otherwise if they hit cancel
+				            JOptionPane.showMessageDialog(null, "You selected nothing."); //say they did and cancel
+				            goodToGo = false;
+				            
+				        } else if (result == JFileChooser.ERROR_OPTION) { //otherwise there was an error
+				            JOptionPane.showMessageDialog(null, "An error occurred.");  
+				            goodToGo = false;
+				        }
+						
+					} else { //otherwise they decided not to select a file
+						JOptionPane.showMessageDialog(null, "Canceling execution."); //so cancel execution
+						goodToGo = false;
+					}
+				}
+				//by this point we either have a false or they grabbed a file
+				
+				if(settingsMap.get("email_tag").equals("yes")) {
+					//make a new dialog window asking for a path to a CSV file.
+					
+					int response = JOptionPane.showConfirmDialog(null, "Please select a CSV file for the email_tag function.", "Choose CSV", JOptionPane.YES_NO_OPTION);
+					if(response == 0) { //if they choose to select a file
+						JFileChooser fileChooser = new JFileChooser(); //make a file chooser
+						
+						int result = fileChooser.showDialog(null, "Select CSV"); //and let them select a file
+						if (result == JFileChooser.APPROVE_OPTION) { //if they get one
+				            String searchTagCsvPath = fileChooser.getSelectedFile().getPath(); //get the path they selected
+				            JOptionPane.showMessageDialog(null, "You selected " + searchTagCsvPath); //tell them what they selected
+				            settingsMap.put("emailTagCsvPath", searchTagCsvPath); //and store it
+				            
+				        } else if (result == JFileChooser.CANCEL_OPTION) { //otherwise if they hit cancel
+				            JOptionPane.showMessageDialog(null, "You selected nothing."); //say they did and cancel
+				            goodToGo = false;
+				            
+				        } else if (result == JFileChooser.ERROR_OPTION) { //otherwise there was an error
+				            JOptionPane.showMessageDialog(null, "An error occurred.");  
+				            goodToGo = false;
+				        }
+						
+					} else { //otherwise they decided not to select a file
+						JOptionPane.showMessageDialog(null, "Canceling execution."); //so cancel execution
+						goodToGo = false;
+					}
+				}
+				//by this point we have covered the CSV files for search_tag and email_tag
+				//we shouldn't require anything else from the user to execute
+				
+				if(goodToGo) {
+					dispatcher.execute(settingsMap);
+				}
 			}
 		});
 		btnExecute.setBounds(328, 289, 117, 29);

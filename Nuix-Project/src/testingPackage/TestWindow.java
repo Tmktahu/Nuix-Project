@@ -29,6 +29,10 @@ import java.util.Date;
 import java.awt.event.ActionEvent;
 import java.awt.SystemColor;
 import javax.swing.JSeparator;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class TestWindow {
 
@@ -93,6 +97,15 @@ public class TestWindow {
 		frame.getContentPane().add(comboBox_2);
 		
 		JComboBox comboBox_3 = new JComboBox(yesNo);
+		comboBox_3.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+
+                    ;  //Do what ever you want :))
+                    System.out.println(e.getItem());
+                }
+			}
+		});
 		comboBox_3.setBounds(128, 136, 71, 27);
 		frame.getContentPane().add(comboBox_3);
 		

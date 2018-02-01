@@ -14,7 +14,7 @@ import com.opencsv.CSVReader;
 
 public class Support {
 	
-	private static Case TARGET_CASE;
+	private Case targetCase;
 	private static Utilities UTILITIES;
 	private static Information info;
 	
@@ -24,15 +24,17 @@ public class Support {
 	}
 	
 	
-	public void open_target_case() {
+	public Case open_target_case(String casePath) {
 		System.out.println("Opening target case");
 		
 		try {
-			TARGET_CASE = UTILITIES.getCaseFactory().open("E:/10.11.17_case_copy_for_testing");
+			targetCase = UTILITIES.getCaseFactory().open(casePath);
 			System.out.println("Opened target case.");
+			return targetCase;
 			
 		} catch (Exception e) {
 			System.out.println("Failed to open target case due to error: " + e);
+			return null;
 			
 		} finally {
 			System.out.println("Finished opening target case.");
@@ -43,7 +45,7 @@ public class Support {
 		System.out.println("Closing target case");
 		
 		try {
-			TARGET_CASE.close();
+			targetCase.close();
 			
 		} catch (Exception e) {
 			System.out.println("Failed to close target case due to error: " + e);
@@ -53,7 +55,7 @@ public class Support {
 		}
 	}
 	
-	public HashMap<String, String> open_qt_csv() {
+	public HashMap<String, String> open_qt_csv(String filePath) {
 		System.out.println("Opening the query-tag .csv file.");
 		
 		try {
@@ -62,31 +64,22 @@ public class Support {
 			HashMap<String, String> csvMap = new HashMap<String, String>();	
 					
 			// === Here we are using OpenCSV ===
-			// assemble the file path
-			String targetFile = "C:\\Users\\";// + info.username + "\\Documents\\Nuix Searches\\target.csv";
-			// create the reader
-			CSVReader csvReader = new CSVReader(new FileReader(new File(targetFile)));
-			// make a list and read everything into it
-			//List<String[]> list = csvReader.readAll();
-			String[] nextLine;
-			while ((nextLine = csvReader.readNext()) != null) {
-		        // nextLine[] is an array of values from the line
-		        //System.out.println(nextLine[0] + nextLine[1] + "etc...");
-				csvMap.put(nextLine[0], nextLine[1]);
+			CSVReader csvReader = new CSVReader(new FileReader(new File(filePath))); //create the reader from the path
+
+			String[] nextLine; //declare the nextLine array
+			while ((nextLine = csvReader.readNext()) != null) { //get the next line in the file and while it isn't null
+				csvMap.put(nextLine[0], nextLine[1]); //put the first element of that line as the key and the second as the value into the map
 		     }
-			// make a 2D array of the correct size
-			//String[][] dataArr = new String[list.size()][];
-			// convert the list to an array
-			//dataArr = list.toArray(dataArr);		
+	
+			csvReader.close(); //close the reader when we are done
 			
-			//return the array
-			return csvMap;
-			
+			return csvMap; //return the map
 					
 		} catch (Exception e) {
-			System.out.println("Make sure that the file exists in \"C:\\Users\\Main\\Documents\\Nuix Searches\\\" and is named \"target.csv.\"");
-			System.out.println("Failed to open query-tag .csv file due to error:");
+			System.out.println("Something was wrong with the CSV file provided for the search-tag function. Check the given path.");
+			System.out.println("Failed to open query-tag .csv file due to error: " + e);
 			return null;
+			
 		} finally {
 			System.out.println("Finished opening the query-tag .csv file.");
 		}
@@ -97,7 +90,7 @@ public class Support {
 	}
 	
 	public Case getCase() {
-		return TARGET_CASE;
+		return targetCase;
 	}
 
 }
