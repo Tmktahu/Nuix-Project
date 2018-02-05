@@ -3,11 +3,14 @@ package nuixproject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import nuix.BulkAnnotater;
 import nuix.Case;
 import nuix.Item;
 import nuix.OcrProcessor;
+import nuix.BatchExporter;
+import nuix.Item;
 
 public class Operations {
 	
@@ -26,7 +29,48 @@ public class Operations {
 	}
 	
 	public void export() {
-		
+		//Export the selected items.
+		System.out.println("Exporting selected items.");
+		try {
+			Set<String> all_tags = targetCase.getAllTags(); //first get all the tags
+			for (String tag : all_tags) { //for each tag we got
+				System.out.println("Exporting items tagged as \"" + tag + "\"."); //say we are exporting
+				BatchExporter batch_exp = support.getUtilities().createBatchExporter("G:\\test\\" + tag + "\\"); //+ str(datetime.date) + "_" + tag + "\\"); //make the batch exporter with the path we want
+				
+				HashMap<String, String> native_settings = new HashMap<String, String>(); //make a hasmap for the settings
+				native_settings.put("naming", "item_name"); //assemble the settings
+				
+				batch_exp.addProduct("native",native_settings); //add a product to the exporter
+				//batch_exp.addProduct("pdf");
+				//batch_exp.addProduct("xhtml_report");
+				//batch_exp.addProduct("thumbnail");
+				
+				List<Item> items = targetCase.search("tag:" + tag); //search for the tag we are exporting and grab the items
+				batch_exp.exportItems(items); //then export them
+			}
+			
+		} catch (Exception e) {
+			System.out.println("There was an error exporting: " + e);
+		}
+
+			//export status:
+			//exporter = utilities.createBatchExporter(export_dir);
+			//exportjob = exporter.exportItemsAsync(current_selected_items);
+			//exportjob.getCurrentStage;
+
+		// BatchExporter.addProduct("native", "text", "pdf", "tiff", "xhtml_report", "thumbnail")
+
+		// BatchExporter.setStampingOptions(value="PRODUCTION_SET")
+
+		// BatchExporter.setApplyHighlights
+
+		// BatchExporter.exportItems(List<Item> items / ProductionSet productionSet)
+
+		// afterExport(AfterExportCallback callback) {?print()?)
+
+		// get all tags > for tag in tags > currentcase.search(tag) > new production set > list of production sets
+
+		// for production set in list of production sets > multipleItemExporter.exportItems(ProductionSet productionSet, path to dest dir, map of options for export)
 	}
 	
 	public void ocr(String filetype, String qualityChoice, String nonSearchable) {

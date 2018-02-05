@@ -16,13 +16,13 @@ public class ProjectMain {
 		
 	public static void main(String[] args) {
 		
-		Utilities utilities;
+		Utilities utilities = null;
 		/*/===================================== Code for getting a Nuix license =====================================
-		final String server = "127.0.0.1";
-		final String user = "hoffman@digitalda.org";
-		final String pass = "cyeJrkCW9rG3";
+		final String server = "ec2-23-21-229-158.compute-1.amazonaws.com";
+		final String user = "email";
+		final String pass = "password";
 		final String port = "27443";
-		final String data = "C:\\Program Files\\Nuix\\Nuix 7.4\\user-data";
+		final String data = "/Users/main/nuix-engine-x86_64-7.2.4/user-data";
 		System.setProperty("nuix.registry.servers", server);
 		System.setProperty("nuix.registry.servers.port", port);
 		Map<String,String> cfg = new HashMap<String,String>();
@@ -30,7 +30,7 @@ public class ProjectMain {
 		cfg.put("userDataDirs", data);
 		nuix.engine.GlobalContainer container = null;
 		nuix.engine.Engine engine = null;
-		nuix.Utilities utilities = null;
+		utilities = null;
 		try {
 			container = nuix.engine.GlobalContainerFactory.newContainer();
 			engine = container.newEngine(cfg);
@@ -71,14 +71,15 @@ public class ProjectMain {
 			    if(container != null)
 			        container.close();
 			}
-		//===================================== End code for getting a license ===================================== */
+		//===================================== End code for getting a license ===================================== 
+		 */
 		
 		
 		//so by this point we have a functioning utlities object
 		//first thing is to get the GUI running
 		//GuiMain masterFrame = new GuiMain(utilities); //create the GUI and pass it the utilities object we got
 		//masterFrame.createWindow();
-		utilities = null;
+		//utilities = null;
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
