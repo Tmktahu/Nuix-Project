@@ -37,10 +37,6 @@ public class Support {
 			//System.out.println("Failed to open target case due to error: " + e);
 			logger.logAction("Failed to open target case due to error " + e);
 			return null;
-			
-		} finally {
-			//System.out.println("Finished opening target case.");
-			logger.logAction("Finished opening target case.");
 		}
 	}
 	
@@ -84,14 +80,11 @@ public class Support {
 					
 		} catch (Exception e) {
 			//System.out.println("Something was wrong with the CSV file provided for the search-tag function. Check the given path.");
-			logger.logAction("Something was wrong with the CSV file provided for the search-tag function. Check the given path.");
+			logger.logAction("Something was wrong with the provided CSV file.");
 			//System.out.println("Failed to open query-tag .csv file due to error: " + e);
 			logger.logAction("Failed to open query-tag .csv file due to error: " + e);
 			return null;
 			
-		} finally {
-			//System.out.println("Finished opening the query-tag .csv file.");
-			logger.logAction("Finished opening the query-tag .csv file.");
 		}
 	}
 	
