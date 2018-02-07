@@ -12,17 +12,20 @@ public class Dispatcher {
 		//execute those tasks via am Operations object.
 	
 	//set up our global variables
+	private MyLogger logger;
 	private Information information;
 	private Support support;
 	private Operations operator;
 	
+	@SuppressWarnings("unused")
 	private Case currentCase;
 	
 	
-	public Dispatcher(Utilities utilities) { //constructor
+	public Dispatcher(Utilities utilities, MyLogger givenLogger) { //constructor
+		logger = givenLogger;
 		information = new Information();
-		support = new Support(utilities, information);
-		operator = new Operations(support);
+		support = new Support(utilities, information, logger);
+		operator = new Operations(support, logger);
 	}
 	
 	public void execute(HashMap<String, String> settings) {
@@ -34,9 +37,34 @@ public class Dispatcher {
 		
 		
 		//here lets do the search_tag action
+		logger.logAction("Beginning Search-Tag operation.");
 		if(settings.get("search_tag").equals("yes")) { //if they want to do a search_tag
 			String csvPath = settings.get("searchTagCsvPath");
 			operator.search_tag(csvPath);
+		}
+		
+		//perform the email_tag action
+		logger.logAction("Beginning Email-Tag operation.");
+		if(settings.get("email_tag").equals("yes")) { //if they want to do a search_tag
+			String csvPath = settings.get("emailTagCsvPath");
+			operator.email_tag(csvPath);
+		}
+		
+		//perform ocr
+		logger.logAction("Beginning OCR operation.");
+		if(settings.get("ocr").equals("yes")) { //if they want to do a search_tag
+			String fileType = settings.get("filetype");
+			String quality = settings.get("quality");
+			String only_searchable = settings.get("only_searchable");
+			operator.ocr(fileType, quality, only_searchable);
+		}
+		
+		//perform export
+		logger.logAction("Beginning export operation.");
+		if(settings.get("export").equals("yes")) { //if they want to do a search_tag
+			String summary = settings.get("summary");
+			String kws_export = settings.get("kws_export");
+			operator.export(summary, kws_export);
 		}
 		
 		

@@ -21,7 +21,7 @@ import nuix.Utilities;
 
 public class GuiMain {
 	
-	private Dispatcher dispatcherObject;
+	//private Dispatcher dispatcherObject;
 	private HashMap<String, String> settingsMap;
 	private JFrame frame;
 	private JPanel panel;
@@ -30,7 +30,7 @@ public class GuiMain {
 	private JTextArea logBox;
 	
 	public GuiMain(Utilities utilities) { //constructor
-		dispatcherObject = new Dispatcher(utilities); //create our dispatcher
+		//dispatcherObject = new Dispatcher(); //create our dispatcher
 		settingsMap = new HashMap<String, String>(); //create the settingsMap
 		count = 0;
 	}
@@ -148,7 +148,7 @@ public class GuiMain {
 			for (Component item : allComponents) { //for each component in the list
 
 				if(item instanceof JComboBox) { //if it is a dropdown-list
-					settingsMap.put(((JComboBox)item).getName(), ((JComboBox)item).getSelectedItem().toString());
+					settingsMap.put(((JComboBox<?>)item).getName(), ((JComboBox<?>)item).getSelectedItem().toString());
 
 				}
 			}

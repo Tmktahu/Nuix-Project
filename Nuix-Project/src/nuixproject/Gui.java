@@ -1,13 +1,7 @@
 package nuixproject;
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.CardLayout;
-import java.awt.BorderLayout;
-import javax.swing.BoxLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
@@ -20,13 +14,10 @@ import javax.swing.SwingConstants;
 
 import nuix.Utilities;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import java.awt.Component;
 import java.awt.Container;
 
-import javax.swing.Box;
-import java.awt.Color;
 import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -39,7 +30,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.awt.event.ActionEvent;
-import java.awt.SystemColor;
 import javax.swing.JSeparator;
 import javax.swing.JButton;
 
@@ -50,11 +40,15 @@ public class Gui {
 	private HashMap<String, String> settingsMap;
 	private Utilities utilities;
 	private Dispatcher dispatcher;
+	private MyLogger logger;
+	private JTextArea txtrApplicationLog;
 	
-	public Gui(Utilities utilitiesObject) {
-		dispatcher = new Dispatcher(utilities); //create our dispatcher
+	public Gui(Utilities utilitiesObject, MyLogger givenLogger) {
+		logger = givenLogger;
+		dispatcher = new Dispatcher(utilities, logger); //create our dispatcher
 		settingsMap = new HashMap<String, String>(); //make the settings hashMap
 		utilities = utilitiesObject; //save the utilities object
+		
 		initialize(); //call initialize
 		frame.setVisible(true); //make the frame visible
 	}
@@ -77,9 +71,10 @@ public class Gui {
 		scrollPane.setBounds(537, 21, 381, 305); //set the position
 		frame.getContentPane().add(scrollPane); //add it to the frame
 		
-		JTextArea txtrApplicationLog = new JTextArea(); //make the text area
+		txtrApplicationLog = new JTextArea(); //make the text area
 		scrollPane.setViewportView(txtrApplicationLog); //add it to the scrollPane
-		txtrApplicationLog.setText(getDate() + " | Application Log:\n"); //set initial text
+		txtrApplicationLog.setText(getDate() + " | Application Log:\n");
+		//logger.logAction(getDate() + " | Application Log:");
 		//=================== end log box setup ===================
 		
 		
@@ -95,7 +90,7 @@ public class Gui {
 		lblEmailTag.setBounds(15, 112, 101, 16);
 		frame.getContentPane().add(lblEmailTag);
 		
-		JComboBox comboBoxEmailTag = new JComboBox(yesNo);
+		JComboBox<String> comboBoxEmailTag = new JComboBox<>(yesNo);
 		comboBoxEmailTag.setBounds(128, 80, 71, 27);
 		comboBoxEmailTag.setName("email_tag");
 		frame.getContentPane().add(comboBoxEmailTag);
@@ -106,7 +101,7 @@ public class Gui {
 		lblSearchtag.setBounds(15, 84, 101, 16);
 		frame.getContentPane().add(lblSearchtag);
 		
-		JComboBox comboBoxSearchTag = new JComboBox(yesNo);
+		JComboBox<String> comboBoxSearchTag = new JComboBox<>(yesNo);
 		comboBoxSearchTag.setBounds(128, 108, 71, 27);
 		comboBoxSearchTag.setName("search_tag");
 		frame.getContentPane().add(comboBoxSearchTag);
@@ -117,7 +112,7 @@ public class Gui {
 		lblOcr.setBounds(15, 140, 101, 16);
 		frame.getContentPane().add(lblOcr);
 		
-		JComboBox comboBoxOcr = new JComboBox(yesNo);
+		JComboBox<String> comboBoxOcr = new JComboBox<>(yesNo);
 		comboBoxOcr.setBounds(128, 136, 71, 27);
 		comboBoxOcr.setName("ocr");
 		frame.getContentPane().add(comboBoxOcr);
@@ -128,7 +123,7 @@ public class Gui {
 		lblExport.setBounds(15, 168, 105, 16);
 		frame.getContentPane().add(lblExport);
 		
-		JComboBox comboBoxExport = new JComboBox(yesNo);
+		JComboBox<String> comboBoxExport = new JComboBox<>(yesNo);
 		comboBoxExport.setBounds(128, 164, 71, 27);
 		comboBoxExport.setName("export");
 		frame.getContentPane().add(comboBoxExport);
@@ -147,7 +142,7 @@ public class Gui {
 		lblFiletype.setBounds(15, 238, 105, 16);
 		frame.getContentPane().add(lblFiletype);
 		
-		JComboBox comboBoxFiletype = new JComboBox(OcrFiletype);
+		JComboBox<String> comboBoxFiletype = new JComboBox<>(OcrFiletype);
 		comboBoxFiletype.setBounds(128, 234, 81, 27);
 		comboBoxFiletype.setName("filetype");
 		frame.getContentPane().add(comboBoxFiletype);
@@ -157,7 +152,7 @@ public class Gui {
 		lblQuality.setBounds(15, 266, 105, 16);
 		frame.getContentPane().add(lblQuality);
 		
-		JComboBox comboBoxQuality = new JComboBox(OcrQuality);
+		JComboBox<String> comboBoxQuality = new JComboBox<>(OcrQuality);
 		comboBoxQuality.setBounds(128, 262, 101, 27);
 		comboBoxQuality.setName("quality");
 		frame.getContentPane().add(comboBoxQuality);
@@ -166,7 +161,7 @@ public class Gui {
 		lblOnlysearchable.setBounds(15, 294, 105, 16);
 		frame.getContentPane().add(lblOnlysearchable);
 		
-		JComboBox comboBoxOnlySearchable = new JComboBox(yesNo);
+		JComboBox<String> comboBoxOnlySearchable = new JComboBox<>(yesNo);
 		comboBoxOnlySearchable.setBounds(128, 290, 71, 27);
 		comboBoxOnlySearchable.setName("only_searchable");
 		frame.getContentPane().add(comboBoxOnlySearchable);
@@ -204,7 +199,7 @@ public class Gui {
 		lblSummary.setBounds(265, 84, 85, 16);
 		frame.getContentPane().add(lblSummary);
 		
-		JComboBox comboBoxSummary = new JComboBox(yesNo);
+		JComboBox<String> comboBoxSummary = new JComboBox<>(yesNo);
 		comboBoxSummary.setBounds(362, 80, 71, 27);
 		comboBoxSummary.setName("summary");
 		frame.getContentPane().add(comboBoxSummary);
@@ -214,7 +209,7 @@ public class Gui {
 		lblKwsExport.setBounds(265, 112, 85, 16);
 		frame.getContentPane().add(lblKwsExport);
 		
-		JComboBox comboBoxKwsExport = new JComboBox(yesNo);
+		JComboBox<String> comboBoxKwsExport = new JComboBox<>(yesNo);
 		comboBoxKwsExport.setBounds(362, 108, 71, 27);
 		comboBoxKwsExport.setName("kws_export");
 		frame.getContentPane().add(comboBoxKwsExport);
@@ -241,9 +236,9 @@ public class Gui {
 		            File file = fc.getSelectedFile();
 		            textField.setText(file.getPath());
 		            //This is where a real application would open the file.
-		            txtrApplicationLog.append("Opening: " + file.getPath() + "\n");
+		            logger.logAction("Opening Case File: " + file.getPath());
 		        } else {
-		        		txtrApplicationLog.append("Open command cancelled by user.\n");
+		        		//logger.logAction("Canceled opening case file.");
 		        }
 			}
 		});
@@ -268,23 +263,23 @@ public class Gui {
 		btnExecute.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//here we take the input from the user and send it to the dispatcher
+				logger.logAction("Setting up for execution");
 				List<Component> allComponents = getAllComponents(frame);
 				for (Component item : allComponents) { //for each component in the list
 					if(item instanceof JComboBox) { //if it is a dropdown-list
-						settingsMap.put(((JComboBox)item).getName(), ((JComboBox)item).getSelectedItem().toString());
+						settingsMap.put(((JComboBox<?>)item).getName(), ((JComboBox<?>)item).getSelectedItem().toString());
 					}
 				}
 				
 				settingsMap.put("casePath", textField.getText());
-				System.out.println(java.util.Arrays.toString(settingsMap.entrySet().toArray()));
-				
-				
+				//System.out.println(java.util.Arrays.toString(settingsMap.entrySet().toArray()));
+				//logger.logAction("Settings selected: " + java.util.Arrays.toString(settingsMap.entrySet().toArray()));
 				
 				boolean goodToGo = true;
 				
 				if(settingsMap.get("search_tag").equals("yes")) {
 					//make a new dialog window asking for a path to a CSV file.
-					
+					logger.logAction("Getting Search-Tag CSV File from user.");
 					int response = JOptionPane.showConfirmDialog(null, "Please select a CSV file for the search_tag function.", "Choose CSV", JOptionPane.YES_NO_OPTION);
 					if(response == 0) { //if they choose to select a file
 						JFileChooser fileChooser = new JFileChooser(); //make a file chooser
@@ -292,7 +287,8 @@ public class Gui {
 						int result = fileChooser.showDialog(null, "Select CSV"); //and let them select a file
 						if (result == JFileChooser.APPROVE_OPTION) { //if they get one
 				            String searchTagCsvPath = fileChooser.getSelectedFile().getPath(); //get the path they selected
-				            JOptionPane.showMessageDialog(null, "You selected " + searchTagCsvPath); //tell them what they selected
+				            JOptionPane.showMessageDialog(null, "You selected \"" + searchTagCsvPath + "\""); //tell them what they selected
+				            logger.logAction("Search-Tag CSV File: \"" + searchTagCsvPath + "\"");
 				            settingsMap.put("searchTagCsvPath", searchTagCsvPath); //and store it
 				            
 				        } else if (result == JFileChooser.CANCEL_OPTION) { //otherwise if they hit cancel
@@ -313,7 +309,7 @@ public class Gui {
 				
 				if(settingsMap.get("email_tag").equals("yes")) {
 					//make a new dialog window asking for a path to a CSV file.
-					
+					logger.logAction("Getting Email-Tag CSV File from user.");
 					int response = JOptionPane.showConfirmDialog(null, "Please select a CSV file for the email_tag function.", "Choose CSV", JOptionPane.YES_NO_OPTION);
 					if(response == 0) { //if they choose to select a file
 						JFileChooser fileChooser = new JFileChooser(); //make a file chooser
@@ -321,7 +317,8 @@ public class Gui {
 						int result = fileChooser.showDialog(null, "Select CSV"); //and let them select a file
 						if (result == JFileChooser.APPROVE_OPTION) { //if they get one
 				            String searchTagCsvPath = fileChooser.getSelectedFile().getPath(); //get the path they selected
-				            JOptionPane.showMessageDialog(null, "You selected " + searchTagCsvPath); //tell them what they selected
+				            JOptionPane.showMessageDialog(null, "You selected \"" + searchTagCsvPath + "\""); //tell them what they selected
+				            logger.logAction("Email-Tag CSV File: \"" + searchTagCsvPath + "\"");
 				            settingsMap.put("emailTagCsvPath", searchTagCsvPath); //and store it
 				            
 				        } else if (result == JFileChooser.CANCEL_OPTION) { //otherwise if they hit cancel
@@ -342,6 +339,7 @@ public class Gui {
 				//we shouldn't require anything else from the user to execute
 				
 				if(goodToGo) {
+					logger.logAction("Good to go. Beginning execution.");
 					dispatcher.execute(settingsMap);
 				}
 			}
@@ -353,7 +351,7 @@ public class Gui {
 	}
 	
 	private String getDate() {
-		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss");
 		Date date = new Date();
 		return dateFormat.format(date); //2016/11/16 12:08:43
 	}
@@ -367,5 +365,9 @@ public class Gui {
 	            compList.addAll(getAllComponents((Container) comp)); //recursively call this function on that component, adding it's results to the arrayList
 	    }
 	    return compList; //once we are all done, return the arrayList
+	}
+	
+	public void writeToLogScreen(String entry) {
+		txtrApplicationLog.append(entry + "\n");
 	}
 }

@@ -1,18 +1,11 @@
 package nuixproject;
 
-import java.awt.EventQueue;
-import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.JFrame;
-
 import nuix.Utilities;
-import nuix.engine.CredentialsCallbackInfo;
-import nuix.engine.LicenceSourceInformation;
-import testingPackage.TestWindow;
 
 public class ProjectMain {
+	
+	private static Gui theGui;
+	private static MyLogger logger;
 		
 	public static void main(String[] args) {
 		
@@ -80,14 +73,26 @@ public class ProjectMain {
 		//GuiMain masterFrame = new GuiMain(utilities); //create the GUI and pass it the utilities object we got
 		//masterFrame.createWindow();
 		//utilities = null;
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Gui window = new Gui(utilities);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
+		
+		
+		
+		logger = new MyLogger(); //boot up the logger and send it a reference to the Gui
+		
+		try {
+			theGui = new Gui(utilities, logger);
+			logger.setGui(theGui);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+		    @Override
+		    public void run() {
+		        logger.closeLog();
+		    }
 		});
+
 	}
 }

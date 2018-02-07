@@ -1,7 +1,7 @@
 package nuixproject;
 
 public class Information {
-	private static String username;
+	//private static String username;
 	
 	//task_priority
 		//ocr
